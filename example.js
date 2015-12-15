@@ -53,7 +53,7 @@ function sortChoices(questions, cb) {
   inquirer.prompt(questions.map(function(question) {
     question.type = 'sort';
     return question;
-  }, cb);
+  }), cb);
 }
 
 // set the question type to `list` on each question and prompt the user to pick a choice.
