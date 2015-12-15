@@ -1,0 +1,28 @@
+{
+  "name": "sort-prompt",
+  "description": "Create a prompt that allows sorting a list of values.",
+  "version": "0.1.0",
+  "homepage": "https://github.com/doowb/sort-prompt",
+  "author": "Brian Woodward (https://github.com/doowb)",
+  "repository": "doowb/sort-prompt",
+  "bugs": {
+    "url": "https://github.com/doowb/sort-prompt/issues"
+  },
+  "license": "MIT",
+  "files": [
+    "index.js"
+  ],
+  "main": "index.js",
+  "engines": {
+    "node": ">=0.10.0"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "mocha": "*",
+    "should": "*"
+  },
+  "keywords": []
+}
