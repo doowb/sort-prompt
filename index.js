@@ -9,10 +9,6 @@
 
 'use strict';
 
-/**
- * `sort` type prompt
- */
-
 var util = require('util');
 var Separator = require('inquirer2/lib/objects/separator');
 var Paginator = require('inquirer2/lib/utils/paginator');
@@ -21,13 +17,36 @@ var Base = require('inquirer2/lib/prompts/base');
 var utils = require('inquirer2/lib/utils/');
 
 /**
- * Module exports
- */
-
-module.exports = Prompt;
-
-/**
- * Constructor
+ * Sort prompt constructor. Register with [inquirer2][] to use.
+ *
+ * ```js
+ * var inquirer = require('inquirer2');
+ * inquirer.registerPrompt('sort', require('sort-prompt'));
+ * inquirer.prompt([
+ *   {
+ *     type: 'sort',
+ *     name: 'menu',
+ *     message: 'Sort the menu items in the order you prefer.',
+ *     choices: [
+ *       'Home',
+ *       new inquirer.Seperator(),
+ *       'About',
+ *       'FAQ'
+ *     ]
+ *   }
+ * ], function(answers) {
+ *   console.log(JSON.stringify(answers, null, 2));
+ * });
+ *
+ * //=> {
+ * //=>   "menu": [
+ * //=>     "Home",
+ * //=>     "------------",
+ * //=>     "About",
+ * //=>     "FAQ"
+ * //=>   ]
+ * //=> }
+ * ```
  */
 
 function Prompt() {
@@ -58,14 +77,31 @@ function Prompt() {
   this.decorateChoices();
 }
 
+/**
+ * Extend `Base`
+ */
+
 util.inherits(Prompt, Base);
 
+/**
+ * Add convience methods to `this.opt.choices`
+ */
+
 Prompt.prototype.decorateChoices = function() {
+
+  /**
+   * Swap 2 items in the `choices` array and ensure the `realChoices` array is updated.
+   */
+
   this.opt.choices.swap = function(a, b) {
     this.choices.splice(b, 0, this.choices.splice(a, 1)[0]);
     this.realChoices = this.choices.filter(Separator.exclude);
     return this.choices;
   };
+
+  /**
+   * Map over the `choices` array.
+   */
 
   this.opt.choices.map = function(fn) {
     return this.choices.map(fn);
@@ -123,6 +159,7 @@ Prompt.prototype.render = function () {
   this.firstRender = false;
 
   this.screen.render(message);
+  return this;
 };
 
 /**
@@ -147,9 +184,11 @@ Prompt.prototype.onSubmit = function () {
 };
 
 /**
- * When user press a key
+ * When user presses Up key
  */
+
 Prompt.prototype.onUpKey = function (e) {
+  // if `shift` key is pressed, move the up
   if (e.key.shift === true) {
     this.moveUp();
   }
@@ -157,6 +196,10 @@ Prompt.prototype.onUpKey = function (e) {
   this.selected = (this.selected > 0) ? this.selected - 1 : len - 1;
   this.render();
 };
+
+/**
+ * Move the currently selected item up.
+ */
 
 Prompt.prototype.moveUp = function() {
   var idx = this.selected;
@@ -169,7 +212,12 @@ Prompt.prototype.moveUp = function() {
 };
 
 
+/**
+ * When user presses Down key
+ */
+
 Prompt.prototype.onDownKey = function (e) {
+  // if `shift` key is pressed, move the down
   if (e.key.shift === true) {
     this.moveDown();
   }
@@ -177,6 +225,10 @@ Prompt.prototype.onDownKey = function (e) {
   this.selected = (this.selected < len - 1) ? this.selected + 1 : 0;
   this.render();
 };
+
+/**
+ * Move the currently selected item down.
+ */
 
 Prompt.prototype.moveDown = function() {
   var idx = this.selected;
@@ -188,8 +240,12 @@ Prompt.prototype.moveDown = function() {
   }
 };
 
+/**
+ * Jump to an item in the list
+ */
+
 Prompt.prototype.onNumberKey = function (input) {
-  if (input <= this.opt.choices.realLength) {
+  if (input <= this.opt.choices.length) {
     this.selected = input - 1;
   }
   this.render();
@@ -200,6 +256,7 @@ Prompt.prototype.onNumberKey = function (input) {
  * @param  {Number} pointer Position of the pointer
  * @return {String}         Rendered content
  */
+
 function listRender(choices, pointer) {
   var output = '';
 
@@ -214,3 +271,9 @@ function listRender(choices, pointer) {
 
   return output.replace(/\n$/, '');
 }
+
+/**
+ * Expose `Prompt`
+ */
+
+module.exports = Prompt;
