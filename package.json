@@ -26,5 +26,12 @@
     "mocha": "*",
     "should": "*"
   },
-  "keywords": []
+  "keywords": [],
+  "verb": {
+    "related": {
+      "list": [
+        "inquirer2"
+      ]
+    }
+  }
 }
