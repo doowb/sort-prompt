@@ -56,7 +56,6 @@ function Prompt() {
     this.throwParamError('choices');
   }
 
-  this.firstRender = true;
   this.selected = 0;
 
   var def = this.opt.default;
@@ -139,10 +138,6 @@ Prompt.prototype.render = function () {
   // Render question
   var message = this.getQuestion();
 
-  if (this.firstRender) {
-    message += utils.chalk.dim('(Use arrow keys to move. Hold down Shift to move item.)');
-  }
-
   // Render choices or answer depending on the state
   if (this.status === 'answered') {
     message += utils.chalk.cyan(this.opt.choices.map(function(choice) {
@@ -153,10 +148,9 @@ Prompt.prototype.render = function () {
     }).join(', '));
   } else {
     var choicesStr = listRender(this.opt.choices, this.selected);
+    message += '\n' + utils.chalk.bold('  (Use arrow keys to move. Hold down Shift to move item.)');
     message += '\n' + this.paginator.paginate(choicesStr, this.selected, this.opt.pageSize);
   }
-
-  this.firstRender = false;
 
   this.screen.render(message);
   return this;
