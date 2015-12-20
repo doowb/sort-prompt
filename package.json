@@ -23,6 +23,7 @@
     "inquirer2": "github:jonschlinkert/inquirer2"
   },
   "devDependencies": {
+    "ansi-colors": "^0.1.0",
     "mocha": "*",
     "should": "*"
   },
