@@ -4,7 +4,7 @@
 
 "use strict";
 var inquirer = require("inquirer2")();
-inquirer.registerPrompt('sort', require('./'));
+inquirer.registerPrompt('sort', require('../'));
 
 var initialQuestions = [
   {
